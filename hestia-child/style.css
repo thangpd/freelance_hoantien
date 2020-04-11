@@ -1,0 +1,32 @@
+/*
+Theme Name: Hestia Child
+Theme URI: https://themeisle.com/themes/hestia/
+Template: hestia
+Author: ThemeIsle
+Author URI: https://themeisle.com
+Description: Hestia is a modern WordPress theme for professionals. It fits creative business, small businesses (restaurants, wedding planners, sport/medical shops), startups, corporate businesses, online agencies and firms, portfolios, ecommerce (WooCommerce), and freelancers. It has a multipurpose one-page design, widgetized footer, blog/news page and a clean look, is compatible with: Flat Parallax Slider, Photo Gallery, Travel Map and Elementor Page Builder . The theme is responsive, WPML, Retina ready, SEO friendly, and uses Material Kit for design.
+Tags: blog,custom-logo,portfolio,e-commerce,rtl-language-support,post-formats,grid-layout,one-column,two-columns,custom-background,custom-colors,custom-header,custom-menu,featured-image-header,featured-images,flexible-header,full-width-template,sticky-post,theme-options,threaded-comments,translation-ready,editor-style,footer-widgets,left-sidebar,right-sidebar,wide-blocks
+Version: 2.5.0.1566212975
+Updated: 2019-08-19 18:09:35
+
+*/
+.not-logged-in .formdn1{
+	display:none !important;
+}
+.logged-in .formdn1{
+	display:block !important;
+}
+.header-filter-gradient {
+    background: #f9c923 !important;
+}
+.card-plain .card-image a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.hestia-blogs article .card-image img {
+    transition: 1s ease-out;
+    max-height: 80px;
+    width: auto;
+}
+
