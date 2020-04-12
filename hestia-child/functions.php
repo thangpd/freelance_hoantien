@@ -88,12 +88,32 @@ if (!function_exists('hoantien_template_redirect')) {
     {
         global $wp;
         if ($wp->request == 'get_list_link_aff') {
-            
+            $arr_query = [
+                'post_type' => 'product',
+                'post_status' => 'publish',
+                'posts_per_page' => -1,
+
+            ];
+            $query = new WP_Query($arr_query);
+            $return_json = [];
+            if ($query->found_posts > 0) {
+                foreach ($query->posts as $value) {
+//                    echo '<pre>';
+//                    print_r($value);
+//                    echo '</pre>';
+                    $linkaff = get_field('linkaff', $value->ID);
+                    if (!empty($linkaff)) {
+                        $return_json['linkaff'][] = ['post_name' => $value->post_name, 'link' => $linkaff];
+                    }
+                }
+            }
+            print_r(json_encode($return_json));
+
+            die();
         }
     }
 
     add_action("template_redirect", 'hoantien_template_redirect');
-
 }
 
 
