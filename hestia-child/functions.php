@@ -20,9 +20,59 @@ if (!function_exists('chld_thm_cfg_parent_css')):
     {
         wp_enqueue_style('chld_thm_cfg_parent', trailingslashit(get_template_directory_uri()) . 'style.css', array('bootstrap', 'hestia-font-sizes'));
     }
-endif;
-add_action('wp_enqueue_scripts', 'chld_thm_cfg_parent_css', 10);
 
+    add_action('wp_enqueue_scripts', 'chld_thm_cfg_parent_css', 10);
+
+endif;
+if (!function_exists('child_theme_config_parent_script')) {
+    function child_theme_config_parent_script()
+    {
+        $script = get_stylesheet_directory_uri() . '/script.js';
+        wp_enqueue_script('chld_thm_cfg_script', $script, array('jquery'), 1.12, true);
+        $js = <<<JS
+      
+jQuery(document).ready(function ($) {
+            console.log('inline script child theme');
+            $('a').on('click',function(e){
+            let li_parent = $(this).parents('li.product');
+            if(li_parent.length !== 0 ){
+                e.preventDefault();
+                let regExpMatchArrayElement = (li_parent[0].classList.value).match(/post-[\d].*?\s/)[0];
+                //remove all leading non-digit with nothing
+                 regExpMatchArrayElement = regExpMatchArrayElement.replace( /^[\D|\s]+/g, '');
+                 //trim whitespace
+                 regExpMatchArrayElement=regExpMatchArrayElement.trim();
+                
+                data={product_id:regExpMatchArrayElement,action:'hoantien_get_link_aff_from_product',};
+                $.ajax({
+                    method:'get',
+                    url:ElementorProFrontendConfig.ajaxurl,
+                    data:data,
+                }).success(function(res){
+                    console.log('ok');
+                console.log(res);
+                
+                    if(res.success==200){
+                        console.log(res.link_aff);
+                        window.location.href=res.link_aff;
+                    }else{
+                        console.log('khong lay duoc link');
+                    }
+                });
+            }
+                            
+            })
+
+});
+JS;
+        if (is_front_page()) {
+            wp_add_inline_script('chld_thm_cfg_script', $js, 'after');
+        }
+
+    }
+
+    add_action('wp_enqueue_scripts', 'child_theme_config_parent_script');
+}
 
 // Replacing the button add to cart by a link to the product in Shop and archives pages
 // For variable and simple products
@@ -114,6 +164,23 @@ if (!function_exists('hoantien_template_redirect')) {
     }
 
     add_action("template_redirect", 'hoantien_template_redirect');
+}
+
+if (!function_exists('hoantien_get_link_aff_from_product')) {
+    function hoantien_get_link_aff_from_product()
+    {
+        $res = [];
+        if (isset($_GET['product_id'])) {
+            $linkaff = get_field('linkaff', $_GET['product_id']);
+            $res['success'] = 200;
+            $res['link_aff'] = $linkaff;
+        }
+        wp_send_json($res,200);
+
+    }
+
+    add_action('wp_ajax_hoantien_get_link_aff_from_product', 'hoantien_get_link_aff_from_product');
+    add_action('wp_ajax_nopriv_hoantien_get_link_aff_from_product', 'hoantien_get_link_aff_from_product');
 }
 
 
